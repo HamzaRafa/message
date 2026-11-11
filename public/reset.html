@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reset Access</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #fbf5f0, #eee7f0);
+            font-family: Arial, sans-serif;
+            color: #39283b;
+        }
+
+        .card {
+            width: min(90%, 380px);
+            padding: 35px;
+            text-align: center;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 15px 50px #5c345c20;
+        }
+
+        h2 { font-family: Georgia, serif; }
+
+        input, button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 15px;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        input {
+            border: 1px solid #ddcbd8;
+            outline-color: #a76f8a;
+        }
+
+        button {
+            border: none;
+            background: #5c345c;
+            color: white;
+            cursor: pointer;
+        }
+
+        #result { margin-top: 18px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div style="font-size:35px">♡</div>
+        <h2>Reset Access</h2>
+        <p>Enter your secret code to unlock the page again.</p>
+
+        <form id="resetForm">
+            <input
+                type="password"
+                id="code"
+                placeholder="Secret code"
+                required
+            >
+            <button type="submit">Reset access</button>
+        </form>
+
+        <p id="result"></p>
+    </div>
+
+    <script>
+        document.getElementById("resetForm")
+        .addEventListener("submit", async (e) => {
+
+            e.preventDefault();
+
+            const code = document.getElementById("code").value;
+            const result = document.getElementById("result");
+
+            try {
+                const response = await fetch("/api/reset", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ code })
+                });
+
+                const data = await response.json();
+
+                result.textContent = data.message;
+                result.style.color = data.success ? "green" : "red";
+
+                if (data.success) {
+                    document.getElementById("code").value = "";
+                }
+
+            } catch (error) {
+                result.textContent = "Server error.";
+                result.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>
