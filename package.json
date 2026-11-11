@@ -1,0 +1,12 @@
+{
+  "name": "hamza-personal-page",
+  "version": "1.0.0",
+  "description": "A personal introduction page",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
